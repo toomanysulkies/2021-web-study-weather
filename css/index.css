@@ -1,17 +1,35 @@
 /*
-2-6
-6-10
-10-14
-14-18
-18-24
+active1 2-6 #0c0075, #0b1025
+active2 6-10 #1f58b6, #061737
+active3 0-14 #fab543, #6d3d03
+active4 14-18 #fa8c43, #242b10
+active5 18-22 #93ae36, #102b25
+active6 22-02 #20779c, #1f062d
 */
 /********************** GLOBAL *********************/
 :root {
 }
 .stage-wrapper {
+    position: relative;
+    width: 100%;
+    min-width: 100vh;
 }
-.stage-wrapper .active {
+.stage-wrapper .active1 {
+    background-image: linear-gradient(#0c0075, #0b1025);
 }
+.stage-wrapper .active2 {
+    background-image: linear-gradient(#1f58b6, #061737);
+}
+.stage-wrapper .active3 {
+    background-image: linear-gradient(#fab543, #6d3d03);
+}
+.stage-wrapper .active4 {
+    background-image: linear-gradient(#fa8c43, #242b10);
+}
+.stage-wrapper .active5 {
+    background-image: linear-gradient(#20779c, #1f062d);
+}
+
 .wrapper {
 }
 
