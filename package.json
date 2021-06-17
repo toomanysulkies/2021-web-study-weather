@@ -1,0 +1,23 @@
+{
+  "name": "0616-weather",
+  "version": "1.0.0",
+  "description": "## 주요기능",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toomanysulkies/2021-web-study-weather.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/toomanysulkies/2021-web-study-weather/issues"
+  },
+  "homepage": "https://github.com/toomanysulkies/2021-web-study-weather#readme",
+  "devDependencies": {
+    "eslint": "^7.28.0"
+  }
+}

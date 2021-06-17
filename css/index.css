@@ -9,28 +9,58 @@ active6 22-02 #20779c, #1f062d
 /********************** GLOBAL *********************/
 :root {
 }
-.stage-wrapper {
+/********************** WRAPPER *********************/
+.bg-wrapper {
     position: relative;
     width: 100%;
     min-height: 100vh;
+    overflow: hidden;
 }
-.stage-wrapper.active1 {
+.bg-wrapper.active1 {
     background-image: linear-gradient(#0c0075, #0b1025);
 }
-.stage-wrapper.active2 {
+.bg-wrapper.active2 {
     background-image: linear-gradient(#1f58b6, #6e3608);
 }
-.stage-wrapper.active3 {
+.bg-wrapper.active3 {
     background-image: linear-gradient(#ffcb78, #ad4b0a);
 }
-.stage-wrapper.active4 {
+.bg-wrapper.active4 {
     background-image: linear-gradient(#fa8c43, #242b10);
 }
-.stage-wrapper.active5 {
+.bg-wrapper.active5 {
     background-image: linear-gradient(#3688ae, #102b25);
 }
-.stage-wrapper.active6 {
+.bg-wrapper.active6 {
     background-image: linear-gradient(#0a2f69, #220433);
+}
+.bg-wrap {
+    position: absolute;
+    background-repeat: no-repeat;
+    opacity: 0.3;
+    background-size: 100% auto;
+    color: #fff;
+}
+.bg-wrap.bg1 {
+    top: 16px;
+    right: 16px;
+    width: 160px;
+    font-size: 160px;
+    opacity: 0.5;
+}
+.bg-wrap.bg2 {
+    bottom: 80px;
+    left: -120px;
+    width: 250px;
+    font-size: 250px;
+    opacity: 0.1;
+}
+.bg-wrap.bg3 {
+    bottom: -30px;
+    right: -30px;
+    width: 150px;
+    font-size: 160px;
+    opacity: 0.05;
 }
 .wrapper {
 }
@@ -52,6 +82,27 @@ active6 22-02 #20779c, #1f062d
 }
 
 @media (max-width: 767px) {
+    .bg-wrap.bg1 {
+        top: 16px;
+        right: 16px;
+        width: 150px;
+        font-size: 150px;
+        opacity: 0.5;
+    }
+    .bg-wrap.bg2 {
+        bottom: 80px;
+        left: -40px;
+        width: 120px;
+        font-size: 120px;
+        opacity: 0.1;
+    }
+    .bg-wrap.bg3 {
+        bottom: -10px;
+        right: 10%;
+        width: 80px;
+        font-size: 80px;
+        opacity: 0.05;
+    }
 }
 
 @media (max-width: 575px) {
