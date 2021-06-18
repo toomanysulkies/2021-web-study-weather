@@ -1,3 +1,6 @@
+/*************** API *****************/
+//KAKAO: 5c626a907a9cf4f51c9ac43d34a8eed5
+
 $(function () {
     /*************** 글로벌 설정 *****************/
     var time;
@@ -23,11 +26,11 @@ $(function () {
         i50n: 'bi-cloud-haze-fill',
     };
     var $bgWrapper = $('.bg-wrapper');
+
     /*************** 사용자 함수 *****************/
-    init();
-    function init() {
-        initBg();
-    }
+    initBg();
+    initMap();
+
     // prettier-ignore
     function initBg() {
         var d = new Date();
@@ -43,6 +46,20 @@ $(function () {
         for (i = 1; i <= 6; i++) $bgWrapper.removeClass('active' + i); //설정된 클래스 네임인 active1(1-6) 에서 설정 숫자값제거
         $bgWrapper.addClass('active' + timeDivision); //제거한 자리에 현재 시간의 분할값(1-6)중 해당 시간의 분할값 클래스명에 삽입
     }
+
+    function initMap() {
+        var container = document.getElementById('map');
+        var options = {
+            center: new kakao.maps.LatLng(36.239934, 127.555918),
+            level: 13,
+            draggable: false,
+            zoomable: false,
+        };
+
+        var map = new kakao.maps.Map(container, options);
+        map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);
+    }
+
     /*************** 이벤트 등록 *****************/
 
     /*************** 이벤트 콜백 *****************/
