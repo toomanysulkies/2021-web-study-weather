@@ -36,7 +36,7 @@ $(function () {
 
     // prettier-ignore
     function initBg() {
-        var d = new Date('2021-01-08 5:03:03');
+        var d = new Date();
        time = d.getHours();
 		timeDivision = 
 		(time >= 2 	&& time < 6	) ? 1 : 
