@@ -1,5 +1,6 @@
 /*************** API *****************/
 //KAKAO: 19da631c27556ccf3866a5dcbecc0671
+//openweathermap.com icon: http://openweathermap.org/img/wn/10d@2x.png
 
 $(function () {
     /*************** 글로벌 설정 *****************/
@@ -35,7 +36,7 @@ $(function () {
 
     // prettier-ignore
     function initBg() {
-        var d = new Date();
+        var d = new Date('2021-01-08 5:03:03');
        time = d.getHours();
 		timeDivision = 
 		(time >= 2 	&& time < 6	) ? 1 : 
@@ -60,8 +61,10 @@ $(function () {
 
         var map = new kakao.maps.Map(mapCenter.lat, mapCenter.lon);
         map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);
-        $(window).resize(onResize).trigger('resize');
+
+        $(window).resize(onResize).trigger('resize'); //윈도우 사이즈가 변경될 때 지도 중심 맞추기
     }
+    $.get('../json/city.json', onGetCity); //도시정보 가져오기
     /*************** 이벤트 콜백 *****************/
 
     // prettier-ignore
@@ -71,6 +74,16 @@ $(function () {
         //위도가 (윈도우 높이가 800보다 크거나 600보다 작으면 위도 35.8 아니면 36.8)
         map.setCenter(new kakao.maps.LatLng(lat, mapCenter.lon)); //
         map.setLevel(windowHeight > 800 ? 13 : 14);
+    }
+    function onGetCity(r) {
+        var position = new kakao.maps.LatLng(37.49887, 127.026581);
+        var customOverlay = new kakao.maps.CustomOverlay({
+            position: position,
+            content: content,
+            xAnchor: 0.3,
+            yAnchor: 0.91,
+        });
+        customOverlay.setMap(map);
     }
 
     /*************** 이벤트 등록 *****************/

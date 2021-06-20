@@ -1,0 +1,222 @@
+<script src="../js/util.js"></script>
+<script>
+	/* 배열 요소 추가, 삭제 - push, pop | unshift, shift | splice | slice */
+
+
+	/************************배열의 뒤에 추가/삭제**********************/
+	var arr = [1, 2, 3, 4, 5];
+
+	// 맨 뒤에 요소를 넣는다.
+	arr.push(6); // [1, 2, 3, 4, 5, 6]
+	arr.push(7, 8); // [1, 2, 3, 4, 5, 6, 7, 8]
+
+	// 맨 뒤의 요소 하나만 빼낸다.
+	// pop의 리턴값 => 빼낸 값
+	var el = arr.pop();	// el: 8, [1, 2, 3, 4, 5, 6, 7]
+
+	console.log(arr, el);
+
+
+	/************************배열의 앞에 추가/삭제**********************/
+	arr = [1, 2, 3, 4, 5];
+
+	// 맨 앞에 요소를 넣는다.
+	arr.unshift(1);	// [1, 1, 2, 3, 4, 5]
+	arr.unshift(1, 2, 3);	// [1, 2, 3, 1, 1, 2, 3, 4, 5]
+
+	// 맨 앞의 요소를 하나만 빼낸다.
+	// shift의 리턴값 => 빼낸 값
+	var el = arr.shift();	// el: 1, [2, 3, 1, 1, 2, 3, 4, 5]
+	console.log(arr, el);
+
+
+	/************************배열의 중간에 추가/삭제**********************/
+	//- 삭제와 추가를 동시에 할 수 있다.
+	// splice의 리턴값 => 삭제된 배열
+	var arr = [1, 2, 3, 4, 5];
+	var el = arr.splice(2, 0, 9, 10); // (작업할idx, 삭제할 개수, 추가할요소...)2번 인덱스에 삭제 안하고 9와 10을 추가
+	console.log(arr, el);
+
+
+	var arr = [1, 2, 3, 4, 5];
+	var el = arr.splice(1, 3);//,[1,5]
+	console.log(arr, el);
+
+
+	/************************배열에서 원하는 값을 카피**********************/
+	//  - 원본배열을 건드리지 않는다.
+	// arr.slice(시작할 idx, 카피를 중단할 끝idx(idx-1)), 두번째 인자를 안쓰면 모든 값을 얘기한다.
+	var arr = [1, 2, 3, 4, 5];
+	var arr2 = arr.slice(1, 4);	// arr2: [2, 3, 4]
+	console.log(arr, arr2);
+
+	// 그래서 Deepcopy에 주로 쓰인다.
+	var arr = [1, 2, 3, 4, 5];
+	var arr2 = arr.slice(0);//모두 카피
+	console.log(arr, arr2);
+
+
+	/************************배열의 병합**********************/
+	// - concat 새로운 배열을 리턴 
+	var arr = [1, 2, 3, 4, 5];
+	var arr2 = [6, 7, 8, 9, 10];
+	var arr3 = arr.concat(arr2);
+	console.log(arr3, arr, arr2);
+
+
+	/************************문자열->배열**********************/
+	/* 규칙이 있는 문자열을 배열로 전환 - 문자열.split() <- 문자열메서드 */
+	var str = 'A,B,C,D,E';
+	var arr = str.split(',');
+	console.log(arr);//arr=["A", "B", "C", "D", "E"]
+
+	// 예: 상품주문(고객의 주문을 하나의 문자열로 저장하여 전달하고 배열로 바꾼다)
+	var str = '11|2|100|red^11|1|95|blue^17|1||blue';
+	var order = str.split('^');
+	var order2 = [];
+	console.log(order);//["11|2|100|red", "11|1|95|blue", "17|1||blue"
+	order.forEach(function (v, i) {
+		order2[i] = v.split('|');	// 배열안에 배열을 넣는다.value"11|2|100|red"를 "11" , "2", "100" ,"red"의 배열로 전환, 그리고 다른 index의 value에도 적용
+	});
+	console.log(order2);
+	/*
+0:  ["11", "2", "100", "red"]
+1:  ["11", "1", "95", "blue"]
+2:  ["17", "1", "", "blue"]
+
+	*/
+	/* 배열을 규칙이 있는 문자열로 전환 - join() */
+	var arr = [1, 2, 3, 4, 5];
+	var str = arr.join('*');
+	console.log(str);//1*2*3*4*5
+
+	// console.clear();
+	/************************배열의 정렬**********************/
+	// - sort() 
+	var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+	arr.sort();
+	console.log(arr);// [1, 10, 2, 3, 4, 5, 6, 7, 8, 9]
+
+	arr.sort(function (a, b) {
+		return a - b;	//오름차순
+	});
+	console.log(arr);//[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+	arr.sort(function (a, b) {
+		return b - a;	//내림차순
+	});
+	console.log(arr);//[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+	arr.sort(sortAsc());
+	console.log(arr);//[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+	arr.sort(sortDesc());
+	console.log(arr);//[10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+
+	arr.reverse();	// 배열을 뒤집는다.
+	console.log(arr);//[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+
+	var user = [
+		{ id: 1, name: '홍길동', height: 175, weight: 78 },
+		{ id: 2, name: '홍길만', height: 145, weight: 72 },
+		{ id: 3, name: '홍길이', height: 165, weight: 88 },
+		{ id: 4, name: '홍길순', height: 185, weight: 92 },
+		{ id: 5, name: '홍길룡', height: 195, weight: 68 }
+	];
+
+	user.sort(sortAsc('weight'));//몸무게 오름차순(가벼운순서)으로 정렬
+	console.log(user);
+
+
+	/**************************** 배열의 반복*****************************/
+	// for(), for(var i in arr) <= 배열의 메서드가 아닌 반복문이다.
+	// forEach(), map(), reduce()
+	//forEach() 메서드는 주어진 함수를 배열 요소 각각에 대해 실행합니다.
+	var arr = [1, 2, 3, 4, 5];
+	var squared = [];
+	arr.forEach(function (v, i) {
+		squared[i] = v * v;
+	});
+	console.log(squared);// [1, 4, 9, 16, 25]
+
+	//map() 메서드는 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
+	var arr = [1, 2, 3, 4, 5];
+	squared = arr.map(function (v, i) {
+		return v * v;
+	});
+	console.log(squared);// [1, 4, 9, 16, 25]
+
+	//reduce() 메서드는 배열의 각 요소에 대해 주어진 리듀서(reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
+	//arr.reduce(callback[, initialValue])
+	/*
+callback: 배열의 각 요소에 대해 실행할 함수.  다음의 네가지 인수를 받는다.
+(accumulator, currentValue, currentIndex, array)
+
+		-accumulator: 콜백의 반환값(누적계산의 결과값)을 누적한다. 
+													콜백의 이전 반환값 또는, 콜백의 첫번째 호출이면서 initialValue를 제공한 경우에는 initialValue의 값
+		-currentValue: 처리할 현재 요소			
+		-currentIndex: 처리할 현재 요소의 인덱스. 
+													initialValue를 제공한 경우 0, 아니면 1부터 시작
+		-array: reduce()를 호출한 배열
+		-initialValue:callback의 최초 호출에서 첫 번째 인수에 제공하는 값.
+											 초기값을 제공하지 않으면 배열의 첫 번째 요소를 사용한다.
+												빈 배열에서 초기값 없이 reduce()를 호출하면 오류가 발생한다.
+	*/
+	// arr: number[] = arr.reduce(callbackfn: (prevValue: number, currentValue: number, currentIndex: number))
+	var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+	var sum = arr.reduce(function (prev, curr, idx) {
+		return prev + curr
+	});
+	console.log(sum);//55
+
+	var user = [
+		{ id: 1, name: '홍길동', height: 175, weight: 78 },
+		{ id: 2, name: '홍길만', height: 145, weight: 72 },
+		{ id: 3, name: '홍길이', height: 165, weight: 88 },
+		{ id: 4, name: '홍길순', height: 185, weight: 92 },
+		{ id: 5, name: '홍길룡', height: 195, weight: 68 }
+	];
+	var userSum = user.reduce(function (prev, curr, idx) {
+		curr.name = '총합';
+		curr.height = prev.height + curr.height;
+		curr.weight = prev.weight + curr.weight;
+		return curr;
+	});
+	console.log(userSum);//{id: 5, name: "총합", height: 865, weight: 398}
+
+
+	/***************************배열의 필터링************************/
+	var user = [
+		{ id: 1, name: '홍길동', height: 175, weight: 78 },
+		{ id: 2, name: '홍길만', height: 145, weight: 72 },
+		{ id: 3, name: '홍길이', height: 165, weight: 88 },
+		{ id: 4, name: '홍길순', height: 185, weight: 92 },
+		{ id: 5, name: '홍길룡', height: 195, weight: 68 }
+	];
+
+	// filter(): 원하는 값만 추출 => 새로운 배열로 리턴
+	var over170 = user.filter(function (v, i) {
+		return v.height >= 170 ? true : false;
+	});
+	console.log(over170);
+	//0: {id: 1, name: "홍길동", height: 175, weight: 78}
+	//1: { id: 4, name: "홍길순", height: 185, weight: 92 }
+	//2: { id: 5, name: "홍길룡", height: 195, weight: 68 }
+
+
+
+	// every(): 모든값이 조건에 맞아야 true 리턴
+	var all170 = user.every(function (v, i) {
+		return v.height >= 170;
+	});
+	console.log(all170);//false
+
+
+
+	// some(): 하나의 값이라도 조건에 맞으면 true 리턴
+	var one170 = user.some(function (v, i) {
+		return v.height >= 170;
+	});
+	console.log(one170);//true
+</script>
