@@ -1,10 +1,12 @@
 /*************** API *****************/
-//KAKAO: 5c626a907a9cf4f51c9ac43d34a8eed5
+//KAKAO: 19da631c27556ccf3866a5dcbecc0671
 
 $(function () {
     /*************** 글로벌 설정 *****************/
+    var map;
     var time;
     var timeDivision;
+    var mapCenter = { lat: 35.8, lon: 128.7 };
     var weatherIcon = {
         i01d: 'bi-brightness-high',
         i01n: 'bi-brightness-high-fill',
@@ -26,7 +28,7 @@ $(function () {
         i50n: 'bi-cloud-haze-fill',
     };
     var $bgWrapper = $('.bg-wrapper');
-
+    var $map = $('#map');
     /*************** 사용자 함수 *****************/
     initBg();
     initMap();
@@ -56,11 +58,20 @@ $(function () {
             zoomable: false,
         };
 
-        var map = new kakao.maps.Map(container, options);
+        var map = new kakao.maps.Map(mapCenter.lat, mapCenter.lon);
         map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);
+        $(window).resize(onResize).trigger('resize');
+    }
+    /*************** 이벤트 콜백 *****************/
+
+    // prettier-ignore
+    function onResize() {
+        var windowHeight = $(window).innerHeight();
+        var lat = (windowHeight > 800 || windowHeight < 600) ? mapCenter.lat : mapCenter.lat + 1;
+        //위도가 (윈도우 높이가 800보다 크거나 600보다 작으면 위도 35.8 아니면 36.8)
+        map.setCenter(new kakao.maps.LatLng(lat, mapCenter.lon)); //
+        map.setLevel(windowHeight > 800 ? 13 : 14);
     }
 
     /*************** 이벤트 등록 *****************/
-
-    /*************** 이벤트 콜백 *****************/
 });
