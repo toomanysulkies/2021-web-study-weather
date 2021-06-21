@@ -1,5 +1,5 @@
 /*************** API *****************/
-//KAKAO: 19da631c27556ccf3866a5dcbecc0671
+//KAKAO:24a84e0d94214e6e7fdd697b820464b0
 //openweathermap.com icon: http://openweathermap.org/img/wn/10d@2x.png
 
 $(function () {
@@ -7,7 +7,7 @@ $(function () {
     var map;
     var time;
     var timeDivision;
-    var mapCenter = { lat: 35.8, lon: 128.7 };
+    var mapCenter = { lat: 35.8, lon: 127.55 };
     var weatherIcon = {
         i01d: 'bi-brightness-high',
         i01n: 'bi-brightness-high-fill',
@@ -46,21 +46,20 @@ $(function () {
 		(time >= 18 && time < 22) ? 5 : 6;
 
         // console.log(timeDivision);
-        for (i = 1; i <= 6; i++) $bgWrapper.removeClass('active' + i); //설정된 클래스 네임인 active1(1-6) 에서 설정 숫자값제거
+        for (var i = 1; i <= 6; i++) $bgWrapper.removeClass('active' + i); //설정된 클래스 네임인 active1(1-6) 에서 설정 숫자값제거
         $bgWrapper.addClass('active' + timeDivision); //제거한 자리에 현재 시간의 분할값(1-6)중 해당 시간의 분할값 클래스명에 삽입
     }
 
     function initMap() {
-        var container = document.getElementById('map');
         var options = {
-            center: new kakao.maps.LatLng(36.239934, 127.555918),
+            center: new kakao.maps.LatLng(mapCenter.lat, mapCenter.lon),
             level: 13,
             draggable: false,
             zoomable: false,
         };
 
-        var map = new kakao.maps.Map(mapCenter.lat, mapCenter.lon);
-        map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN);
+        map = new kakao.maps.Map($map[0], options);
+        map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN); // 지형도 붙이기
 
         $(window).resize(onResize).trigger('resize'); //윈도우 사이즈가 변경될 때 지도 중심 맞추기
     }
@@ -76,14 +75,15 @@ $(function () {
         map.setLevel(windowHeight > 800 ? 13 : 14);
     }
     function onGetCity(r) {
-        var position = new kakao.maps.LatLng(37.49887, 127.026581);
-        var customOverlay = new kakao.maps.CustomOverlay({
-            position: position,
-            content: content,
-            xAnchor: 0.3,
-            yAnchor: 0.91,
+        r.city.forEach(function (v, i) {
+            var customOverlay = new kakao.maps.CustomOverlay({
+                position: new kakao.maps.LatLng(v.lat, v.lon),
+                content: '<div class="co-wrapper">' + v.name + '</div>',
+                xAnchor: v.anchor ? v.anchor.x : 0.25,
+                yAnchor: v.anchor ? v.anchor.y : 0.65,
+            });
+            customOverlay.setMap(map);
         });
-        customOverlay.setMap(map);
     }
 
     /*************** 이벤트 등록 *****************/
