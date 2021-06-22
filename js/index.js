@@ -1,35 +1,31 @@
 /*************** API *****************/
 //KAKAO:24a84e0d94214e6e7fdd697b820464b0
 //openweathermap.com icon: http://openweathermap.org/img/wn/10d@2x.png
+//d448bd0f037cc68b858d9cc0c8556118
 
 $(function () {
     /*************** 글로벌 설정 *****************/
-    var map;
+    var map; // kakao 지도 객체
     var time;
     var timeDivision;
-    var mapCenter = { lat: 35.8, lon: 127.55 };
+    var mapCenter = { lat: 35.8, lon: 128.7 };
     var weatherIcon = {
-        i01d: 'bi-brightness-high',
-        i01n: 'bi-brightness-high-fill',
-        i02d: 'bi-cloud-sun',
-        i02n: 'bi-cloud-sun-fill',
-        i03d: 'bi-cloud',
-        i03n: 'bi-cloud-fill',
-        i04d: 'bi-clouds',
-        i04n: 'bi-cloud-fills',
-        i09d: 'bi-cloud-rain-heavy',
-        i09n: 'bi-cloud-rain-heavy-fill',
-        i10d: 'bi-cloud-drizzle',
-        i10n: 'bi-cloud-drizzle-fill',
-        i11d: 'bi-cloud-lightning',
-        i11n: 'bi-cloud-lightning-fill',
-        i13d: 'bi-cloud-snow',
-        i13n: 'bi-cloud-snow-fill',
-        i50d: 'bi-cloud-haze',
-        i50n: 'bi-cloud-haze-fill',
+        i01: 'bi-brightness-high',
+        i02: 'bi-cloud-sun',
+        i03: 'bi-cloud',
+        i04: 'bi-clouds',
+        i09: 'bi-cloud-rain-heavy',
+        i10: 'bi-cloud-drizzle',
+        i11: 'bi-cloud-lightning',
+        i13: 'bi-cloud-snow',
+        i50: 'bi-cloud-haze',
     };
+    var iconPath = '//openweathermap.org/img/wn/';
+    var defPath = '//via.placeholder.com/40x40/c4f1f1?text=%20';
+
     var $bgWrapper = $('.bg-wrapper');
     var $map = $('#map');
+
     /*************** 사용자 함수 *****************/
     initBg();
     initMap();
@@ -52,39 +48,92 @@ $(function () {
 
     function initMap() {
         var options = {
-            center: new kakao.maps.LatLng(mapCenter.lat, mapCenter.lon),
-            level: 13,
+            center: new kakao.maps.LatLng(mapCenter.lat, mapCenter.lon), //지도의 중심좌표
+            level: 13, //지도의 확대레벨
             draggable: false,
             zoomable: false,
         };
 
-        map = new kakao.maps.Map($map[0], options);
+        map = new kakao.maps.Map($map[0], options); //지도 생성!
         map.addOverlayMapTypeId(kakao.maps.MapTypeId.TERRAIN); // 지형도 붙이기
 
         $(window).resize(onResize).trigger('resize'); //윈도우 사이즈가 변경될 때 지도 중심 맞추기
     }
     $.get('../json/city.json', onGetCity); //도시정보 가져오기
     /*************** 이벤트 콜백 *****************/
-
-    // prettier-ignore
-    function onResize() {
-        var windowHeight = $(window).innerHeight();
-        var lat = (windowHeight > 800 || windowHeight < 600) ? mapCenter.lat : mapCenter.lat + 1;
-        //위도가 (윈도우 높이가 800보다 크거나 600보다 작으면 위도 35.8 아니면 36.8)
-        map.setCenter(new kakao.maps.LatLng(lat, mapCenter.lon)); //
-        map.setLevel(windowHeight > 800 ? 13 : 14);
-    }
     function onGetCity(r) {
         r.city.forEach(function (v, i) {
+            var content = ''; //커스텀 오버레이에 표시할 내용 HTML 문자열 또는 DOM element
+            content += '<div class="co-wrapper ' + (v.minimap ? '' : 'minimap') + '" data-lat="' + v.lat + '" data-lon="' + v.lon + '">';
+            content += '<div class="co-wrap">';
+            content += '<div class="icon-wrap">';
+            content += '<img src="' + defPath + '" class="icon w-100">';
+            content += '</div>';
+            content += '<div class="temp-wrap">';
+            content += '<span class="temp"></span>℃';
+            content += '</div>';
+            content += '</div>';
+            content += v.name;
+            content += '</div>';
             var customOverlay = new kakao.maps.CustomOverlay({
-                position: new kakao.maps.LatLng(v.lat, v.lon),
-                content: '<div class="co-wrapper">' + v.name + '</div>',
+                position: new kakao.maps.LatLng(v.lat, v.lon), //커스텀 오버레이가 지도에 표시될 위치
+                content: content,
                 xAnchor: v.anchor ? v.anchor.x : 0.25,
                 yAnchor: v.anchor ? v.anchor.y : 0.65,
             });
-            customOverlay.setMap(map);
+            customOverlay.setMap(map); //커스텀 오버레이 지도에 표시
         });
+        $('.co-wrapper').mouseenter(onOverlayEnter);
+        $('.co-wrapper').mouseleave(onOverlayLeave);
+        $('.co-wrapper').click(onOverlayClick);
+        $(window).trigger('resize');
+    }
+    // prettier-ignore
+    function onResize() {
+        var windowHeight = $(window).innerHeight();
+        var lat = windowHeight > 800 || windowHeight < 600 ? mapCenter.lat : mapCenter.lat + 1;
+        map.setCenter(new kakao.maps.LatLng(lat, mapCenter.lon));
+        if (windowHeight < 800) {
+            $('.minimap').hide();
+            $('.map-wrapper .co-wrapper').addClass('active');
+            map.setLevel(14);
+        } else {
+            map.setLevel(13);
+            $('.minimap').show();
+            $('.map-wrapper .co-wrapper').removeClass('active');
+        }
     }
 
     /*************** 이벤트 등록 *****************/
+    function onOverlayClick() {}
+
+    function onOverlayEnter() {
+        $(this).find('.co-wrap').css('display', 'flex');
+        $(this).parent().css('z-index', 2);
+        var lat = $(this).data('lat');
+        var lon = $(this).data('lon');
+        $.get(
+            'https://api.openweathermap.org/data/2.5/weather',
+            {
+                lat: lat,
+                lon: lon,
+                units: 'metric',
+                appid: 'd448bd0f037cc68b858d9cc0c8556118',
+            },
+            function (r) {
+                console.log(r);
+                console.log(r.main.temp);
+                console.log(r.weather[0].icon);
+                $(this).find('.temp').text(r.main.temp);
+                $(this)
+                    .find('.icon')
+                    .attr('src', iconPath + r.weather[0].icon + '@2x.png');
+            }.bind(this)
+        );
+    }
+
+    function onOverlayLeave() {
+        $(this).parent().css('z-index', 0);
+        $(this).find('.co-wrap').css('display', 'none');
+    }
 });
