@@ -89,13 +89,14 @@ $(function () {
                 yAnchor: v.anchor ? v.anchor.y : 0.65,
             });
             customOverlay.setMap(map); //커스텀 오버레이 지도에 표시
+            $(customOverlay.a).mouseenter(onOverlayEnter);
+            $(customOverlay.a).mouseleave(onOverlayLeave);
+            $(customOverlay.a).click(onOverlayClick);
         });
-        $('.co-wrapper').mouseenter(onOverlayEnter);
-        $('.co-wrapper').mouseleave(onOverlayLeave);
-        $('.co-wrapper').click(onOverlayClick);
+
         $(window).trigger('resize');
     }
-    // prettier-ignore
+
     function onResize() {
         var windowHeight = $(window).innerHeight();
         var lat = windowHeight > 800 || windowHeight < 600 ? mapCenter.lat : mapCenter.lat + 1;
@@ -115,11 +116,11 @@ $(function () {
     function onOverlayClick() {}
 
     function onOverlayEnter() {
-        //this-> .co-wrapper 중 클릭된객체
+        //this-> .co-wrapper 중 호버된 객체의 부모(kakao map API가 생성한 객체)
         $(this).find('.co-wrap').css('display', 'flex');
-        $(this).parent().css('z-index', 1);
-        sendData.lat = $(this).data('lat'); // data-lat
-        sendData.lon = $(this).data('lon'); // data-lon
+        $(this).css('z-index', 1);
+        sendData.lat = $(this).find('.co-wrapper').data('lat'); // data-lat
+        sendData.lon = $(this).find('.co-wrapper').data('lon'); // data-lon
         $.get(dailyURL, sendData, onLoad.bind(this));
         function onLoad(r) {
             $(this).find('.temp').text(r.main.temp);
@@ -128,7 +129,7 @@ $(function () {
     }
 
     function onOverlayLeave() {
-        $(this).parent().css('z-index', 0);
+        $(this).css('z-index', 0);
         $(this).find('.co-wrap').css('display', 'none');
     }
 });
