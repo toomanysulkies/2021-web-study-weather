@@ -183,6 +183,16 @@ body {
     left: -10px;
     top: calc(50% - 5px);
 }
+.map-wrapper .co-wrapper .co-wrap.dokdo {
+    left: -8px;
+    right: auto;
+    transform: translate(-100%, -50%);
+}
+.map-wrapper .co-wrapper .co-wrap.dokdo::after {
+    content: '▶';
+    left: auto;
+    right: -10px;
+}
 .map-wrapper .co-wrapper .co-wrap > .icon-wrap {
     width: 40px;
 }
