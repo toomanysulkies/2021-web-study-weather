@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>JS bind()</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css">
+	<script src="../js/jquery-3.5.1.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<button class="bt-push btn btn-primary">눌러봐</button>
+	</div>
+	<script>
+		console.log(this);
+
+		/*********************vanilla js******************************/
+		document.querySelector('.bt-push').addEventListener('click', function () { console.log(this) }.bind(this));
+
+		document.querySelector('.bt-push').addEventListener('click', onClick.bind(this));
+		function onClick() { console.log(this); }
+
+
+		/*********************jQuery******************************/
+		$('.bt-push').click(function () {
+			console.log(this);
+		}.bind(this));
+	</script>
+</body>
+
+</html>
