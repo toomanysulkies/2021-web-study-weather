@@ -134,7 +134,55 @@ body {
 /********************** WEATHER *********************/
 .weather-wrapper {
     width: 49%;
+    background-color: rgba(0, 0, 0, 0.25);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
 }
+.weather-wrapper .title-wrap {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+}
+.weather-wrapper .title-wrap h3.position {
+    font-size: 0.875em;
+    font-weight: lighter;
+}
+.weather-wrapper .title-wrap h2.name {
+    font-size: 1.5em;
+    border-bottom: 2px solid #fff;
+    margin-bottom: 0.25em;
+}
+.weather-wrapper .title-wrap h4.time {
+    font-size: 0.75em;
+    font-weight: lighter;
+}
+
+.weather-wrapper .summary-wrap {
+    font-size: 2em;
+}
+
+.weather-wrapper .temp-wrap {
+    font-weight: lighter;
+}
+.weather-wrapper .temp-wrap .temp {
+    font-size: 1.5em;
+}
+.weather-wrapper .temp-wrap .temp-desc .gap {
+    font-size: 1.25em;
+    font-weight: normal;
+}
+.weather-wrapper .temp-wrap .temp span {
+    font-weight: normal;
+    font-size: 2em;
+}
+.weather-wrapper .temp-wrap .temp-gap span {
+    font-weight: normal;
+    font-size: 1.25em;
+}
+
 /********************** MAP *********************/
 .map-wrapper {
     width: 49%;
