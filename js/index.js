@@ -2,6 +2,7 @@
 //KAKAO:24a84e0d94214e6e7fdd697b820464b0
 //openweathermap.com icon: http://openweathermap.org/img/wn/10d@2x.png
 //d448bd0f037cc68b858d9cc0c8556118
+//24시간 전 날씨정보: https://api.openweathermap.org/data/2.5/onecall?lat=37.56322905592715&lon=126.98987106691214&exclude=&appid=02efdd64bdc14b279bc91d9247db4722&units=metric&dt=1620780822
 
 $(function () {
     /*************** 글로벌 설정 *****************/
@@ -22,6 +23,7 @@ $(function () {
     };
     var dailyURL = 'https://api.openweathermap.org/data/2.5/weather';
     var weeklyURL = 'https://api.openweathermap.org/data/2.5/forecast';
+    var yesterdayURL = 'https://api.openweathermap.org/data/2.5/onecall/timemachine';
     var sendData = { appid: '02efdd64bdc14b279bc91d9247db4722', units: 'metric' };
     var defPath = '//via.placeholder.com/40x40/c4f1f1?text=%20';
 
@@ -31,6 +33,7 @@ $(function () {
     /*************** 사용자 함수 *****************/
     initBg();
     initMap();
+    initDaily();
 
     // prettier-ignore
     function initBg() {
@@ -61,6 +64,17 @@ $(function () {
 
         $(window).resize(onResize).trigger('resize'); //윈도우 사이즈가 변경될 때 지도 중심 맞추기
         $.get('../json/city.json', onGetCity); //도시정보 가져오기
+    }
+
+    function initDaily() {
+        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        function onSuccess(r) {
+            console.log(r.coords.latitude);
+            console.log(r.coords.longitude);
+        }
+        function onError(err) {
+            console.log(err);
+        }
     }
 
     // openweathermap의 icon 가져오기
