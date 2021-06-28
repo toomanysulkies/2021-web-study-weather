@@ -163,6 +163,12 @@ body {
 .weather-wrapper .summary-wrap {
     font-size: 2em;
 }
+.weather-wrapper .summary-wrap > :first-child {
+    font-size: 1em;
+}
+.weather-wrapper .summary-wrap > :last-child {
+    font-size: 0.875em;
+}
 
 .weather-wrapper .temp-wrap {
     font-weight: lighter;

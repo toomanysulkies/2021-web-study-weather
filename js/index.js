@@ -24,7 +24,7 @@ $(function () {
     var dailyURL = 'https://api.openweathermap.org/data/2.5/weather';
     var weeklyURL = 'https://api.openweathermap.org/data/2.5/forecast';
     var yesterdayURL = 'https://api.openweathermap.org/data/2.5/onecall/timemachine';
-    var sendData = { appid: '02efdd64bdc14b279bc91d9247db4722', units: 'metric' };
+    var sendData = { appid: '02efdd64bdc14b279bc91d9247db4722', units: 'metric', lang: 'kr' };
     var defPath = '//via.placeholder.com/40x40/c4f1f1?text=%20';
 
     var $bgWrapper = $('.bg-wrapper');
@@ -33,7 +33,7 @@ $(function () {
     /*************** 사용자 함수 *****************/
     initBg();
     initMap();
-    initDaily();
+    initWeather();
 
     // prettier-ignore
     function initBg() {
@@ -66,11 +66,14 @@ $(function () {
         $.get('../json/city.json', onGetCity); //도시정보 가져오기
     }
 
-    function initDaily() {
+    function initWeather() {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
         function onSuccess(r) {
-            console.log(r.coords.latitude);
-            console.log(r.coords.longitude);
+            var data = JSON.parse(JSON.stringify(sendData));
+            data.lat = r.coords.latitude;
+            data.lon = r.coords.longitude;
+            $.get(todayURL, data, onToday);
+            $.get(weeklyURL, data, onWeekly);
         }
         function onError(err) {
             console.log(err);
@@ -82,6 +85,44 @@ $(function () {
         return '//openweathermap.org/img/wn/' + icon + '@2x.png';
     }
     /*************** 이벤트 콜백 *****************/
+    function onToday(r) {
+        console.log(r);
+        var $wrapper = $('.weather-wrapper');
+        var $title = $wrapper.find('.title-wrap');
+        var $summary = $wrapper.find('.summary-wrap');
+        var $desc = $wrapper.find('.desc-wrap');
+        $title.find('.name').text(r.name + ', KR');
+        $title.find('.time').text(moment(r.dt * 1000).format('hh시 mm분 기준'));
+        $summary.find('span').eq(0).text(r.weather[0].description);
+        $summary
+            .find('span')
+            .eq(1)
+            .text('(' + r.weather[0].main + ')');
+
+        var data = JSON.parse(JSON.stringify(sendData));
+        data.lat = r.coord.lat;
+        data.lon = r.coord.lon;
+        data.dt = r.dt - 86400;
+        $.get(yesterdayURL, data, onYesterday);
+        function onYesterday(r2) {
+            var gap = (r.main.temp - r2.current.temp).toFixed(1);
+            if (gap == 0) {
+                $desc.find('.temp-desc .josa').text('와');
+                $desc.find('.temp-desc .gap').hide();
+                $desc.find('.temp-desc .desc').text('같아요');
+            } else {
+                $desc.find('.temp-desc .josa').text('보다');
+                $desc.find('.temp-desc .gap').show();
+                $desc.find('.temp-desc .gap span').text(Math.abs(gap));
+                $desc.find('.temp-desc .desc').text(gap > 0 ? '높아요' : '낮아요');
+            }
+        }
+    }
+
+    function onWeekly(r) {
+        console.log(r);
+    }
+
     function onGetCity(r) {
         r.city.forEach(function (v, i) {
             var content = ''; //커스텀 오버레이에 표시할 내용 HTML 문자열 또는 DOM element
@@ -130,13 +171,15 @@ $(function () {
     function onOverlayClick() {}
 
     function onOverlayEnter() {
-        //this-> .co-wrapper 중 호버된 객체의 부모(kakao map API가 생성한 객체)
+        // this => .co-wrapper중 호버당한 넘 부모(kakao가 생성한 넘)
         $(this).find('.co-wrap').css('display', 'flex');
         $(this).css('z-index', 1);
-        sendData.lat = $(this).find('.co-wrapper').data('lat'); // data-lat
-        sendData.lon = $(this).find('.co-wrapper').data('lon'); // data-lon
-        $.get(dailyURL, sendData, onLoad.bind(this));
+        var data = JSON.parse(JSON.stringify(sendData));
+        data.lat = $(this).find('.co-wrapper').data('lat'); // data-lat
+        data.lon = $(this).find('.co-wrapper').data('lon'); // data-lon
+        $.get(todayURL, data, onLoad.bind(this));
         function onLoad(r) {
+            // console.log(r);
             $(this).find('.temp').text(r.main.temp);
             $(this).find('.icon').attr('src', getIcon(r.weather[0].icon));
         }
