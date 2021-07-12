@@ -2,7 +2,7 @@
 //KAKAO:24a84e0d94214e6e7fdd697b820464b0
 //openweathermap.com icon: http://openweathermap.org/img/wn/10d@2x.png
 //d448bd0f037cc68b858d9cc0c8556118
-//24시간 전 날씨정보: https://api.openweathermap.org/data/2.5/onecall?lat=37.56322905592715&lon=126.98987106691214&exclude=&appid=02efdd64bdc14b279bc91d9247db4722&units=metric&dt=1620780822
+//24시간 전 날씨정보: https://api.openweathermap.org/data/2.5/onecall?lat=37.56322905592715&lon=126.98987106691214&exclude=&appid=d448bd0f037cc68b858d9cc0c8556118&units=metric&dt=1620780822
 
 $(function () {
     /*************** 글로벌 설정 *****************/
@@ -21,10 +21,10 @@ $(function () {
         i13: 'bi-cloud-snow',
         i50: 'bi-cloud-haze',
     };
-    var dailyURL = 'https://api.openweathermap.org/data/2.5/weather';
+    var todayURL = 'https://api.openweathermap.org/data/2.5/weather';
     var weeklyURL = 'https://api.openweathermap.org/data/2.5/forecast';
     var yesterdayURL = 'https://api.openweathermap.org/data/2.5/onecall/timemachine';
-    var sendData = { appid: '02efdd64bdc14b279bc91d9247db4722', units: 'metric', lang: 'kr' };
+    var sendData = { appid: 'd448bd0f037cc68b858d9cc0c8556118', units: 'metric', lang: 'kr' };
     var defPath = '//via.placeholder.com/40x40/c4f1f1?text=%20';
 
     var $bgWrapper = $('.bg-wrapper');
